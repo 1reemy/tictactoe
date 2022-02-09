@@ -1,0 +1,28 @@
+#title{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+#board{
+    display:grid;
+    grid-template-columns: 100px 100px 100px;
+    grid-template-rows: 100px 100px 100px;
+    grid-gap:10px;
+    background-color: darkblue;
+    width:320px;
+    height:320px;
+}
+#sector{
+    background-color: cadetblue;
+}
+#playerSelection{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+main{
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
+}
