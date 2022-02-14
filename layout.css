@@ -12,7 +12,7 @@
     width:320px;
     height:320px;
 }
-#sector{
+.sector{
     background-color: cadetblue;
 }
 #playerSelection{
