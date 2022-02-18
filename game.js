@@ -1,32 +1,21 @@
-const game = (player) =>{
-    player = document.querySelector("button");
-    const mark = document.createElement("h2");
-    player.addEventListener('click',()=>{
-        if (player === playerA.id){
-            mark.textContent = "X";
-        }
-        else if(player === playerB.id){
-            mark.textContent = "O";
-        }
-    });
-    
-    const gameBoard = (() =>{
-        const quad =["","","","","","","","",""];
+const gameBoard = (() =>{ 
+        const choice = document.querySelector("button");
+        const mark = document.createElement("h2");             
         const sector = document.querySelectorAll(".sector");
-        const entry = (mark, index) => {
-            index += mark;
-        }
-        quad.forEach(entry);
-        let play = quad;
-        const display = (value) => {
-            value += play;
-        }
-                
-        sector.addEventListener("click",()=>{
-            sector.forEach(display);
+
+        const quad =["","","","","","","","",""];
+
+        choice.addEventListener('click',()=>{
+            if (choice.id === 'x'){
+                mark.textContent = "X";
+            }
+            else if(choice.id === 'o'){
+                mark.textContent = "O";
+            }
+        })       
+              
+        sector.forEach((sector) => {sector.addEventListener("click",()=>{
             sector.appendChild(mark);
-        });
+        })});        
+        return {sector}
     })();
-    return{gameBoard};
-}
-const round = game("select");
