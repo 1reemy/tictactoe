@@ -1,21 +1,23 @@
 const gameBoard = (() =>{ 
-        const choice = document.querySelector("button");
-        const mark = document.createElement("h2");             
-        const sector = document.querySelectorAll(".sector");
+        const choiceA = document.querySelector("#x");
+        const choiceB = document.querySelector("#o");          
+        const sectors = document.querySelectorAll(".sector");
+        
+        let sector = Array.from(sectors);  
+        
+        choiceA.addEventListener('click',()=>{
+            sector.forEach((mark)=>{                
+                mark.addEventListener('click',()=>{
+                    mark.textContent = "X";
+                })
+            })
+        })
 
-        const quad =["","","","","","","","",""];
-
-        choice.addEventListener('click',()=>{
-            if (choice.id === 'x'){
-                mark.textContent = "X";
-            }
-            else if(choice.id === 'o'){
-                mark.textContent = "O";
-            }
-        })       
-              
-        sector.forEach((sector) => {sector.addEventListener("click",()=>{
-            sector.appendChild(mark);
-        })});        
-        return {sector}
+        choiceB.addEventListener('click',()=>{
+            sector.forEach((mark)=>{
+                mark.addEventListener('click',()=>{
+                    mark.textContent = "O";
+                })
+            })
+        })
     })();
