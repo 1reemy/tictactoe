@@ -1,18 +1,33 @@
-const gameBoard = (() =>{ 
-        //const choice = document.querySelector("button");       
+const gameBoard = (() =>{        
         const sectors = document.querySelectorAll(".sector");
         
         let sector = Array.from(sectors);
+        const winner = [
+            [0,1,2],
+            [3,4,5],
+            [6,7,8],
+            [0,3,6],
+            [1,4,7],
+            [2,5,8],
+            [0,4,8],
+            [2,4,6]
+        ];
+
         let choice = "X"; 
         const gamePlay = () =>{
-            sector.forEach((mark)=>{     
-                mark.addEventListener('click',()=>{
-                    if(mark.textContent != "")
-                    return
-                    mark.textContent = choice;
-                    choice = choice === "X"?"O":"X";                                      
-                })                              
-            })
+            const move = () =>{
+                sector.forEach((mark)=>{     
+                    mark.addEventListener('click',()=>{
+                        if(mark.textContent != "")
+                        return
+                        mark.textContent = choice;
+                        gameWinner();
+                        choice = choice === "X"?"O":"X";                                                                  
+                    })                              
+                })        
+                
+            }
+            move()
             const resetGame = () =>{
                 const reset = document.querySelector("#reset");
                 reset.addEventListener('click',()=>{
@@ -21,26 +36,17 @@ const gameBoard = (() =>{
                     })
                 })
             }
-            resetGame();
+            resetGame();            
             const gameWinner = () =>{
-                const winner = [
-                    [0,1,2],
-                    [3,4,5],
-                    [6,7,8],
-                    [0,3,6],
-                    [1,4,7],
-                    [2,5,8],
-                    [0,4,8],
-                    [2,4,6]
-                ];
-                sector.forEach((mark)=>{
-                    let index = mark.textContent.indexOf("X");
-                    if(index === winner[index]){
-                        console.log("winner!!!");
+                winner.forEach((combo)=>{
+                    let checkWinner = combo.every(idx =>
+                        sector[idx].textContent === choice
+                    )
+                    if(checkWinner){
+                        alert(choice + " has won!");
                     }
-                })
-            }
-            gameWinner();
+                })                               
+            }            
         }
         const players = (player1, player2, machine)=>{
             
