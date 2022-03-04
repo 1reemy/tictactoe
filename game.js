@@ -14,18 +14,18 @@ const gameBoard = (() =>{
         ];
 
         let choice = "X"; 
-        const gamePlay = () =>{
-            const move = () =>{
-                sector.forEach((mark)=>{     
-                    mark.addEventListener('click',()=>{
-                        if(mark.textContent != "")
-                        return
+                
+        const gamePlay = () =>{       
+            const move = () =>{                
+                sector.forEach((mark)=>{
+                    mark.addEventListener("click",()=>{
+                        if(mark.textContent === ""){                                            
+                        choice = choice === "X"?"O":"X";
                         mark.textContent = choice;
                         gameWinner();
-                        choice = choice === "X"?"O":"X";                                                                  
-                    })                              
-                })        
-                
+                        }                                               
+                    })
+                })                
             }
             move()
             const resetGame = () =>{
@@ -36,12 +36,11 @@ const gameBoard = (() =>{
                     })
                 })
             }
-            resetGame();            
+            resetGame();           
             const gameWinner = () =>{
                 winner.forEach((combo)=>{
                     let checkWinner = combo.every(idx =>
-                        sector[idx].textContent === choice
-                    )
+                        sector[idx].textContent === choice)
                     if(checkWinner){
                         alert(choice + " has won!");
                     }
