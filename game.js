@@ -2,6 +2,7 @@ const gameBoard = (() =>{
         const sectors = document.querySelectorAll(".sector");
         
         let sector = Array.from(sectors);
+        
         const winner = [
             [0,1,2],
             [3,4,5],
@@ -13,9 +14,10 @@ const gameBoard = (() =>{
             [2,4,6]
         ];
 
-        let choice = "X"; 
-                
-        const gamePlay = () =>{       
+        let choice = "X";
+                        
+        const gamePlay = () =>{
+            const boardFull = () => sector.every((val) => val.textContent != "");   
             const move = () =>{                
                 sector.forEach((mark)=>{
                     mark.addEventListener("click",()=>{
@@ -36,16 +38,20 @@ const gameBoard = (() =>{
                     })
                 })
             }
-            resetGame();           
+            resetGame(); 
+            const highLight = (combo) => {
+                    combo.forEach((idx) => sector[idx].classList.add("highlight"))
+            }          
             const gameWinner = () =>{
-                winner.forEach((combo)=>{
-                    let checkWinner = combo.every(idx =>
-                        sector[idx].textContent === choice)
-                    if(checkWinner){
-                        alert(choice + " has won!");
-                    }
-                })                               
-            }            
+                let checkWinner = winner.find((combo)=>
+                combo.every((idx) => sector[idx].textContent === choice)                
+                );
+                if(checkWinner){                    
+                    highLight(checkWinner);
+                }else if(boardFull()){
+                    alert("Tie!");
+                }
+            };                        
         }
         const players = (player1, player2, machine)=>{
             

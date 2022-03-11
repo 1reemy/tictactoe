@@ -30,3 +30,6 @@ main{
     align-items: center;
     justify-content: center;
 }
+.sector.highlight{
+    background-color: orangered;
+}
