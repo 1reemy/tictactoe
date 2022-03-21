@@ -1,61 +1,74 @@
 const gameBoard = (() =>{        
-        const sectors = document.querySelectorAll(".sector");
-        
-        let sector = Array.from(sectors);
-        
-        const winner = [
-            [0,1,2],
-            [3,4,5],
-            [6,7,8],
-            [0,3,6],
-            [1,4,7],
-            [2,5,8],
-            [0,4,8],
-            [2,4,6]
-        ];
+    const sectors = document.querySelectorAll(".sector");
+    
+    let sector = Array.from(sectors);
+    
+    const winner = [
+        [0,1,2],
+        [3,4,5],
+        [6,7,8],
+        [0,3,6],
+        [1,4,7],
+        [2,5,8],
+        [0,4,8],
+        [2,4,6]
+    ];
 
-        let choice = "X";
-                        
-        const gamePlay = () =>{
-            const boardFull = () => sector.every((val) => val.textContent != "");   
-            const move = () =>{                
-                sector.forEach((mark)=>{
-                    mark.addEventListener("click",()=>{
-                        if(mark.textContent === ""){                                            
-                        choice = choice === "X"?"O":"X";
-                        mark.textContent = choice;
-                        gameWinner();
-                        }                                               
-                    })
-                })                
-            }
-            move()
-            const resetGame = () =>{
-                const reset = document.querySelector("#reset");
-                reset.addEventListener('click',()=>{
-                    sector.forEach((mark) =>{
-                        mark.textContent = "";
-                    })
-                })
-            }
-            resetGame(); 
-            const highLight = (combo) => {
-                    combo.forEach((idx) => sector[idx].classList.add("highlight"))
-            }          
-            const gameWinner = () =>{
-                let checkWinner = winner.find((combo)=>
-                combo.every((idx) => sector[idx].textContent === choice)                
-                );
-                if(checkWinner){                    
-                    highLight(checkWinner);
-                }else if(boardFull()){
-                    alert("Tie!");
+    let choice = "X";
+                    
+    const gamePlay = () =>{
+        const boardFull = () => sector.every((val) => val.textContent != "");
+        const gameOver = () => {
+            for(let i = 0; i <= sector.length; i++){
+                if(sector[i] != choice){
+                    sector.fill("", sector[i], sector.length)
                 }
-            };                        
+            }
         }
-        const players = (player1, player2, machine)=>{
-            
+        const move = () =>{            
+            sector.forEach((mark)=>{                
+                let step = ()=>{
+                    if(mark.textContent === ""){                                            
+                    choice = choice === "X"?"O":"X";
+                    mark.textContent = choice;
+                    gameWinner();
+                    }                                                                                    
+                }
+                if(step){
+                    mark.addEventListener("click",step)
+                }
+            })                
         }
-        return {gamePlay};       
-    })();
-    gameBoard.gamePlay();
+        
+        const resetGame = () =>{
+            const reset = document.querySelector("#reset");
+            reset.addEventListener('click',()=>{
+                sector.forEach((mark) =>{
+                    mark.classList.remove("highlight");
+                    mark.textContent = "";
+                })
+            })
+        }
+         
+        const highLight = (combo) => {
+                combo.forEach((idx) => sector[idx].classList.add("highlight"))
+        }          
+        const gameWinner = () =>{
+            let checkWinner = winner.find((combo)=>combo.every((idx) => sector[idx].textContent === choice));
+            if(checkWinner){                    
+                highLight(checkWinner);
+                gameOver();
+            }else if(boardFull()){
+                alert("Tie!");
+            }
+        };
+        move();
+        resetGame();                        
+    }
+    const players = (player1, player2, machine)=>{
+        
+    }
+    return {gamePlay};       
+})();
+gameBoard.gamePlay();
+    
