@@ -33,3 +33,6 @@ main{
 .sector.highlight{
     background-color: orangered;
 }
+.sector.gameover{
+    pointer-events: none;
+}

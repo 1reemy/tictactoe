@@ -18,13 +18,11 @@ const gameBoard = (() =>{
                     
     const gamePlay = () =>{
         const boardFull = () => sector.every((val) => val.textContent != "");
-        const gameOver = () => {
-            for(let i = 0; i <= sector.length; i++){
-                if(sector[i] != choice){
-                    sector.fill("", sector[i], sector.length)
-                }
-            }
-        }
+        const gameOver = () => sector.forEach((spot) =>{
+            if(spot != choice){
+                     spot.classList.add("gameover");
+                       }
+         })
         const move = () =>{            
             sector.forEach((mark)=>{                
                 let step = ()=>{
@@ -34,9 +32,7 @@ const gameBoard = (() =>{
                     gameWinner();
                     }                                                                                    
                 }
-                if(step){
-                    mark.addEventListener("click",step)
-                }
+                mark.addEventListener("click",step)                
             })                
         }
         
@@ -45,6 +41,7 @@ const gameBoard = (() =>{
             reset.addEventListener('click',()=>{
                 sector.forEach((mark) =>{
                     mark.classList.remove("highlight");
+                    mark.classList.remove("gameover");
                     mark.textContent = "";
                 })
             })
