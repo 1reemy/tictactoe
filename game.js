@@ -14,8 +14,19 @@ const gameBoard = (() =>{
         [2,4,6]
     ];
 
-    let choice = "X";
+    let choice = "O";
                     
+    const Players = (humanPlayer)=>{
+        const machine = () => {
+            const play = Math.floor(Math.random() * sector.length)
+            sector[play].textContent = "X";
+            choice = choice === "O"?"X":"O";
+        }
+        return{humanPlayer, machine}
+    }
+    
+    const player = Players(choice);
+
     const gamePlay = () =>{
         const boardFull = () => sector.every((val) => val.textContent != "");
         const gameOver = () => sector.forEach((spot) =>{
@@ -26,16 +37,16 @@ const gameBoard = (() =>{
         const move = () =>{            
             sector.forEach((mark)=>{                
                 let step = ()=>{
-                    if(mark.textContent === ""){                                            
-                    choice = choice === "X"?"O":"X";
-                    mark.textContent = choice;
+                    if(mark.textContent === ""){                        
+                    choice = choice === "O"?"X":"O";
+                    mark.textContent = player.humanPlayer;                                      
+                    player.machine();
                     gameWinner();
                     }                                                                                    
                 }
-                mark.addEventListener("click",step)                
+                mark.addEventListener("click",step);
             })                
         }
-        
         const resetGame = () =>{
             const reset = document.querySelector("#reset");
             reset.addEventListener('click',()=>{
@@ -59,13 +70,10 @@ const gameBoard = (() =>{
                 alert("Tie!");
             }
         };
+        
         move();
         resetGame();                        
-    }
-    const players = (player1, player2, machine)=>{
-        
-    }
+    }    
     return {gamePlay};       
 })();
 gameBoard.gamePlay();
-    
