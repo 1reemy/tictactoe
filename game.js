@@ -15,12 +15,17 @@ const gameBoard = (() =>{
     ];
 
     let choice = "O";
-                    
+    let play = Math.floor(Math.random() * sector.length);
+    //let validMove = [];               
     const Players = (humanPlayer)=>{
-        const machine = () => {
-            const play = Math.floor(Math.random() * sector.length)
+        const machine = () => {  
+            do{
+                play = Math.floor(Math.random() * sector.length);
+            }            
+            while(sector[play].textContent !== "")
             sector[play].textContent = "X";
-            choice = choice === "O"?"X":"O";
+            /*validMove += play;
+            console.log(validMove.length)*/                       
         }
         return{humanPlayer, machine}
     }
@@ -28,6 +33,11 @@ const gameBoard = (() =>{
     const player = Players(choice);
 
     const gamePlay = () =>{
+        const legitComputerMove = () =>{            
+            if(!boardFull()){
+                player.machine()
+            }
+        }
         const boardFull = () => sector.every((val) => val.textContent != "");
         const gameOver = () => sector.forEach((spot) =>{
             if(spot != choice){
@@ -39,10 +49,10 @@ const gameBoard = (() =>{
                 let step = ()=>{
                     if(mark.textContent === ""){                        
                     choice = choice === "O"?"X":"O";
-                    mark.textContent = player.humanPlayer;                                      
-                    player.machine();
+                    mark.textContent = player.humanPlayer; 
                     gameWinner();
-                    }                                                                                    
+                    legitComputerMove();
+                    }                                                                     
                 }
                 mark.addEventListener("click",step);
             })                
@@ -70,7 +80,6 @@ const gameBoard = (() =>{
                 alert("Tie!");
             }
         };
-        
         move();
         resetGame();                        
     }    
