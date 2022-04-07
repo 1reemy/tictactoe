@@ -14,15 +14,14 @@ const gameBoard = (() =>{
         [2,4,6]
     ];
 
-    let choice = "O";
+    let choice;
     let play = Math.floor(Math.random() * sector.length);
     //let validMove = [];               
-    const Players = (humanPlayer)=>{
-        const machine = () => {  
-            do{
+    const Players = (humanPlayer)=>{        
+        const machine = () => { 
+            while(sector[play].textContent !== ""){
                 play = Math.floor(Math.random() * sector.length);
-            }            
-            while(sector[play].textContent !== "")
+            }
             sector[play].textContent = "X";
             /*validMove += play;
             console.log(validMove.length)*/                       
@@ -30,7 +29,7 @@ const gameBoard = (() =>{
         return{humanPlayer, machine}
     }
     
-    const player = Players(choice);
+    const player = Players("O");
 
     const gamePlay = () =>{
         const legitComputerMove = () =>{            
@@ -40,18 +39,17 @@ const gameBoard = (() =>{
         }
         const boardFull = () => sector.every((val) => val.textContent != "");
         const gameOver = () => sector.forEach((spot) =>{
-            if(spot != choice){
+            if(spot != player.humanPlayer || spot != player.machine()){
                      spot.classList.add("gameover");
                        }
          })
         const move = () =>{            
             sector.forEach((mark)=>{                
                 let step = ()=>{
-                    if(mark.textContent === ""){                        
-                    choice = choice === "O"?"X":"O";
+                    if(mark.textContent === ""){
                     mark.textContent = player.humanPlayer; 
-                    gameWinner();
                     legitComputerMove();
+                    gameWinner();                    
                     }                                                                     
                 }
                 mark.addEventListener("click",step);
@@ -72,9 +70,13 @@ const gameBoard = (() =>{
                 combo.forEach((idx) => sector[idx].classList.add("highlight"))
         }          
         const gameWinner = () =>{
-            let checkWinner = winner.find((combo)=>combo.every((idx) => sector[idx].textContent === choice));
-            if(checkWinner){                    
-                highLight(checkWinner);
+            let o = winner.find((combo)=>combo.every((idx) => sector[idx].textContent === player.humanPlayer));
+            let x = winner.find((combo)=>combo.every((idx) => sector[idx].textContent === "X"));
+            if(o){                    
+                highLight(o);
+                gameOver();
+            }else if(x){                    
+                highLight(x);
                 gameOver();
             }else if(boardFull()){
                 alert("Tie!");
