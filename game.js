@@ -14,13 +14,13 @@ const gameBoard = (() =>{
         [2,4,6]
     ];
 
-    let play = Math.floor(Math.random() * sector.length);
     let validMove = [];  
-    let finalFour = [];
+    let finalThree = [];
     let boardState = [];
     let availMoves = [];
     const Players = (humanPlayer)=>{        
         const machine = () => { 
+            let play = Math.floor(Math.random() * sector.length);
             while(sector[play].textContent !== ""){
                 play = Math.floor(Math.random() * sector.length);
             }
@@ -34,75 +34,114 @@ const gameBoard = (() =>{
     const player = Players("O");
 
     const gamePlay = () =>{
+
     const emptySquares = () =>{
         availMoves = boardState.concat(validMove);
         if(availMoves.length === 4){
-            finalFour.push(sector.filter((empty) => empty.textContent === ""));
-            console.log(finalFour);
-        }               
-    }        
-    /*const minmax = () => {
-            let availSpots = emptySquares();
-            for(let i = 0; i <= sector.length; i++){
-                let win = sector.push(availSpots);
-                if(winner[i] === win){
-                    player.machine();
-                    return {score:-10};
-                }else{
-                    player.humanPlayer;
-                    return {score:10};
-                }
-            }
-        }*/
-        const legitComputerMove = () =>{            
-            if(!boardFull()){
-                player.machine();                            
-                emptySquares();
-                //minmax();
-            }
+            finalThree.push(sector.filter((empty) => empty.textContent === ""));
+            console.log(finalThree);            
         }
-        const boardFull = () => sector.every((val) => val.textContent != "");
-
-        const gameOver = () => sector.forEach((spot) =>{
-            if(spot != player.humanPlayer || spot != player.machine()){
-                     spot.classList.add("gameover");
-                       }
-         })
-        const move = () =>{            
-            sector.forEach((mark)=>{                
-                let step = ()=>{                    
-                    if(mark.textContent === ""){                    
-                    mark.textContent = player.humanPlayer;
-                    boardState.push(mark.textContent); 
-                    legitComputerMove();
-                    gameWinner();
-                    //console.log(boardState);                    
-                    }                                                                     
-                }
-                mark.addEventListener("click",step);  
-                                             
-            })                
-        }
-        const resetGame = () =>{
-            const reset = document.querySelector("#reset");
-            reset.addEventListener('click',()=>{
-                sector.forEach((mark) =>{
-                    mark.classList.remove("highlight");
-                    mark.classList.remove("gameover");
-                    mark.textContent = "";
-                })
+        return finalThree;               
+    }
+    const highLight = (combo) => combo.forEach((idx) => sector[idx].classList.add("highlight")); 
+ 
+    const move = () =>{            
+        sector.forEach((mark)=>{                
+            let step = ()=>{                    
+                if(mark.textContent === ""){                    
+                mark.textContent = player.humanPlayer;
+                boardState.push(mark.textContent); 
+                legitComputerMove();
+                winCheck();                    
+                }                                                                     
+            }
+            mark.addEventListener("click",step);  
+                                         
+        })                
+    }
+    const resetGame = () =>{
+        const reset = document.querySelector("#reset");
+        reset.addEventListener('click',()=>{
+            sector.forEach((mark) =>{
+                mark.classList.remove("highlight");
+                mark.classList.remove("gameover");
+                mark.textContent = "";
             })
+        })
+    }
+
+    const minimax = (newBoard, user) => {
+        let legitMove = emptySquares();
+        let moves = [];
+        const gameWinner = (user) => {
+            let win = winner.find((combo)=>combo.every((idx) => sector[idx].textContent === user));
+            if(user === player.humanPlayer){
+                win;
+            }else if(user === player.machine()){
+                win;
+            }else if(boardFull()){
+                return;
+            }
+            return user;
+         };
+        if(gameWinner(player.humanPlayer)){
+            return {score:-10};
+        }else if(gameWinner(player.machine())){
+            return {score:10};
         }
-         
-        const highLight = (combo) => {
-                combo.forEach((idx) => sector[idx].classList.add("highlight"))
-        }          
-        const gameWinner = () =>{
+        for(let i = 0; i < legitMove.length; i++){	     
+          let move = {};
+          move.index = newBoard[legitMove[i]];
+          newBoard[legitMove[i]] = user;
+          if(user === player.machine()){
+          let result = minimax(newBoard,player.humanPlayer);
+          move.score = result.score;
+          }
+          else{
+              let result = minimax(newBoard, player.machine());
+          move.score = result.score;
+              }
+          newBoard[legitMove[i]] = move.index;
+          moves.push(move);
+        }
+        let bestMove;
+        if(user === player.machine()){
+          let bestScore = -10000;
+          for(let i = 0; i < moves.length; i++){
+          if(moves[i].score > bestScore){
+            bestScore = moves[i].score;
+            bestMove = i;
+          }
+          }
+        }
+        else{
+          let bestScore = 10000;
+          for(let i = 0; i < moves.length; i++){
+          if(moves[i].score < bestScore){
+             bestScore = moves[i].score;
+             bestMove = i;
+          }
+          }
+        }
+        return moves[bestMove];
+      }
+    
+    const legitComputerMove = () =>{            
+        if(!boardFull()){ 
+            minimax(sector, player.machine());
+        }
+    }
+    const boardFull = () => sector.every((val) => val.textContent != "");
+
+    const gameOver = () => sector.forEach((spot) =>{
+        if(spot != player.humanPlayer || spot != player.machine()){
+                 spot.classList.add("gameover");
+                   }
+     })
+               
+        const winCheck = () =>{
             let o = winner.find((combo)=>combo.every((idx) => sector[idx].textContent === player.humanPlayer));
             let x = winner.find((combo)=>combo.every((idx) => sector[idx].textContent === "X"));
-            /*let availMoves = [];
-                availMoves = boardState.concat(validMove);
-                console.log(availMoves);*/
             if(o){                    
                 highLight(o);
                 gameOver();
@@ -113,6 +152,7 @@ const gameBoard = (() =>{
                 alert("Tie!");
             }
         };
+        
         move();
         resetGame();
     }    
