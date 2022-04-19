@@ -66,6 +66,11 @@ const gameBoard = (() =>{
                 mark.classList.remove("highlight");
                 mark.classList.remove("gameover");
                 mark.textContent = "";
+                //emptySquares();
+                /*availMoves = [];
+                boardState = [];
+                validMove = [];
+                finalThree = [];*/
             })
         })
     }
